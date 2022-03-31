@@ -6,7 +6,7 @@ As a reference genome I will use Saccharomyces cerevisiae, in the genome databas
 Here I use the following software:<br>
 - HISAT2 version 2.2.1 <br>
 - gffread v0.12.1. <br>
-
+- featureCounts 2.0.1
 ### 2.1. Aligning with HISAT2
 Building genome index:<br>
 run hisat2-build<br>
@@ -115,4 +115,16 @@ cat data/norm-matrix-deseq2.txt | R -f code/draw-heatmap.r
 I see<br>
 ![heatmap](./images/heatmap.jpg)
 ## 3. Result Interpretation
-
+### 3.1 Choosing genes
+In the result.txt file genes are sorted by adjusted p-values. So let’s take the first 50 genes from this file using linux head utility and keep only the first column (gene names) using linux cut program:
+```bash
+head data/result.txt -n 50 | cut -f 1 > data/genes.txt
+```
+### 3.2 Estimation of gene roles
+Using gene ontology terms to get a sense of what these genes are doing<br>
+I go to http://www.yeastgenome.org/cgi-bin/GO/goSlimMapper.pl<br>
+For the top 50 differentially expressed genes:<br>
+- in step 1 press “Choose file” and upload genes.txt<br> 
+- in step 2, select “Yeast GO-Slim: Process”<br>
+- in step 3, make sure “SELECT ALL TERMS” is highlighted. Press “Search”<br>
+The further analysis you can find in ./code/analysis.ipynb
